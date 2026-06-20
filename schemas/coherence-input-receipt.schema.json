@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:olp:wire:0.1:schema:coherence-input-receipt",
+  "title": "OLP coherence_input_receipt 0.1",
+  "allOf": [
+    { "$ref": "urn:olp:wire:0.1:schema:envelope" },
+    {
+      "type": "object",
+      "required": [
+        "trace_id",
+        "capture_loss",
+        "dropped_span_count",
+        "observed_span_count",
+        "trace_root",
+        "tree_algorithm",
+        "completion_policy",
+        "seal_reason",
+        "semantic_claims",
+        "typed_event_status",
+        "semantic_graph_hash",
+        "signal_schema_id",
+        "signal_points_micros",
+        "state_cap"
+      ],
+      "properties": {
+        "kind": { "const": "coherence_input_receipt" },
+        "trace_id": { "$ref": "urn:olp:wire:0.1:schema:envelope#/$defs/trace_id" },
+        "capture_loss": { "type": "boolean" },
+        "dropped_span_count": { "type": "integer", "minimum": 0 },
+        "observed_span_count": { "type": "integer", "minimum": 0 },
+        "trace_root": { "$ref": "urn:olp:wire:0.1:schema:envelope#/$defs/hash256" },
+        "tree_algorithm": { "const": "rfc6962-mth-sha256-promote-odd-v1" },
+        "completion_policy": { "$ref": "urn:olp:wire:0.1:schema:envelope#/$defs/completion_policy" },
+        "seal_reason": {
+          "enum": ["grace_elapsed", "shutdown_before_grace_elapsed"]
+        },
+        "semantic_claims": { "const": true },
+        "typed_event_status": { "const": "valid" },
+        "semantic_graph_hash": { "$ref": "urn:olp:wire:0.1:schema:envelope#/$defs/hash256" },
+        "signal_schema_id": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "minLength": 1, "pattern": "^[\\x20-\\x7e]+$" }
+          ]
+        },
+        "signal_points_micros": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "state_cap": { "const": "white" }
+      }
+    }
+  ],
+  "unevaluatedProperties": false
+}
